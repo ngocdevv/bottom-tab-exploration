@@ -3,9 +3,10 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Octicons } from '@expo/vector-icons';
 import Animated, {
     interpolate,
+    interpolateColor,
     useAnimatedStyle,
     useDerivedValue,
-    withSpring,
+    withSpring
 } from 'react-native-reanimated';
 
 type TabProps = {
@@ -37,46 +38,41 @@ export const TabItem = ({
     const rTabStyle = useAnimatedStyle(() => {
         return {
             width: interpolate(progress.value, [0, 1], [minWidth, maxWidth]),
-            backgroundColor: isActive ? "#ffffff10" : "#000000",
+            // backgroundColor: isActive ? "#ffffff" : "#000000"
+            backgroundColor: interpolateColor(progress.value, [0, 1], ["#000000", "#ffffff"])
         };
     }, [isActive]);
 
     const gap = useDerivedValue(() => {
-        return interpolate(progress.value, [0, 1], [0, 15]);
+        return interpolate(progress.value, [0, 1], [0, 12]);
     }, []);
 
     const rTextStyle = useAnimatedStyle(() => {
         return {
-            opacity: progress.value ** 3,
-            marginLeft: gap.value,
+            opacity: interpolate(progress.value, [0, 1], [0, 1]),
+            marginLeft: gap.value
         };
     }, [isActive]);
 
     const rIconStyle = useAnimatedStyle(() => {
-        const translateX = interpolate(
-            progress.value,
-            [0, 1],
-            [(minWidth - IconSize) / 2, IconSize],
-        );
         return {
-            left: translateX,
-            position: 'absolute',
+            opacity: interpolate(progress.value, [0, 1], [0.8, 1]),
         };
-    }, []);
+    }, [isActive]);
 
     return (
         <Pressable onPress={onPress}>
             <Animated.View style={[rTabStyle, styles.container]}>
                 <View style={styles.innerContainer}>
                     <Animated.View style={[styles.iconContainer, rIconStyle]}>
-                        <Octicons name={icon} size={IconSize} color="white" />
+                        <Octicons name={icon} size={IconSize} color="#323232"  />
                     </Animated.View>
-                    <Animated.Text
+                    {isActive && <Animated.Text
                         numberOfLines={1}
                         key={label}
                         style={[styles.label, rTextStyle]}>
                         {label}
-                    </Animated.Text>
+                    </Animated.Text>}
                 </View>
             </Animated.View>
         </Pressable>
@@ -94,6 +90,7 @@ const styles = StyleSheet.create({
         height: IconSize,
         width: IconSize,
         zIndex: 100,
+        // backgroundColor: "blue"
     },
     innerContainer: {
         alignItems: 'center',
@@ -101,11 +98,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         overflow: 'hidden',
         width: '100%',
+        // backgroundColor: "red"
     },
     label: {
         fontSize: 16,
-        fontWeight: '500',
+        fontWeight: '600',
         zIndex: 100,
-        color: "white"
+        color: "#000",
+        // backgroundColor: "yellow"
     },
 });
