@@ -41,3 +41,12 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Native ports (ios-swift / android-kotlin)
+ios-swift/**/xcuserdata/
+ios-swift/**/DerivedData/
+android-kotlin/.gradle/
+android-kotlin/.kotlin/
+android-kotlin/build/
+android-kotlin/**/build/
+android-kotlin/local.properties
